@@ -1,0 +1,119 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{titling}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathabx}
+
+\pretitle{\begin{center}\Huge\bfseries}
+\posttitle{\par\end{center}\vskip 0.5em}
+\preauthor{\begin{center}\Large}
+\postauthor{\end{center}}
+\predate{\par\large\centering}
+\postdate{\par}
+
+\title{Teoretyczne Podstawy Informatyki \newline Zadanie Domowe}
+\author{Jakub Musiał 268442}
+\date{Maj 2024}
+
+\begin{document}
+
+\maketitle
+
+\hspace{1cm}
+
+\section*{Lista 5 - Zadanie 32}
+
+\subsection*{Opis zadania}
+    Pokazać, że dla gramatyki bezkontekstowej $G$ nie jest rozstrzygalne, czy $L(G) = \Sigma^\ast$.
+
+\subsection*{Rozwiązanie}
+    Ustalmy alfabet $\Sigma$ oraz weźmy instancję problemu odpowiedniości Posta nad $\Sigma$:
+    \begin{center}
+        $A = (a_1, ..., a_k)$ oraz $B = (b_1, ..., b_k)$ taką że $(\forall 1 \leq i \leq k)(a_i, b_i \in \Sigma^\ast \backslash \{\varepsilon\})$
+    \end{center}
+
+    \noindent Niech $\Sigma' = \Sigma \text{ } \cup \{1, ..., k\}$, gdzie $\{1, ..., k\} \notin \Sigma$.
+
+    \noindent \newline
+
+    \noindent Stwórzmy gramatyki bezkontekstowe nad $\Sigma'$:
+    \begin{itemize}
+        \item $G_A : S_A -> a_iS_Ai | a_ii$
+        \item $G_B : S_B -> b_iS_Bi | b_ii$
+    \end{itemize}
+    \noindent Gdzie gdzie $i \in \{1, ..., k\}$ oraz $a_i \in \Sigma$.
+
+    \noindent Zatem po pewnej sekwencji wyprowadzeń otrzymujemy słowa postaci:
+    $$
+    S_A \rightarrow a_{i_1}S_Ai_1 -> a_{i_1}a_{i_2}S_Ai_2i_1 \rightarrow ... \rightarrow \underbrace{a_{i_1}a_{i_2}...a_{i_j}}_{a_{i_l} \in \Sigma}\underbrace{i_ji_{j - 1}...i_1}_{i_l \in \{1, ..., k\}}
+    $$
+    \noindent oraz analogicznie dla wyprowadzeń w gramatyce $G_B$.
+
+    \noindent Możemy zauważyć, że gramatyki $G_A$ oraz $G_B$ są jednoznaczne.
+
+    \newpage
+
+    \noindent Dodatkowo możemy zauważyć, że jeżeli słowo $w$ jest wyprowadzalne w $G_A$ oraz w $G_B$, to istnieje rozwiązanie zadanej instancji problemu Posta. Otrzymujemy zatem:
+    $$
+        L(G_A) \cap L(G_B) \ne \varnothing \iff \exists \text{ } a_{i_1}a_{i_2}...a_{i_j}i_ji_{j - 1}...i_1 = b_{i_1}b_{i_2}...b_{i_j}i_ji_{j - 1}...i_1
+    $$
+    \noindent Wtedy $i_1i_2...i_j$ jest rozwiązaniem problemu Posta.
+
+    \noindent Analogicznie $L(G_A) \cap L(G_B) = \varnothing \iff \text{PCP nie ma rozwiązania}$.
+
+    \noindent Zatem z nierozstrzygalności PCP widzimy, że pytanie, czy $L(G_A) \cap L(G_B) \ne \varnothing$ nie jest rozstrzygalne.
+
+    \noindent \newline
+
+    \noindent Wiemy z założenia, że gramatyki $G_A$ i $G_B$ są bezkontekstowe. Możemy zatem skonstruować dla nich PDA wg poniższego schematu:
+
+    \begin{itemize}
+        \item Tworzymy $k$ par stanów - każda związana z ciągiem $a_i$
+        \item Dopóki widzimy na wejściu symbole z alfabetu $\Sigma$, to wrzucamy je na stos
+        \item Gdy zobaczymy na wejści symbol $i_j \in \{1, ..., k\}$, to w stanach odpowiadających ciągowi $a_{i_j}$ sprawdzamy, czy na szczycie stosu znajduje się $(a_{i_j})^R$. Jeśli nie, to przechodzimy do stanu śmietnikowego, który ignoruje resztę wejścia i nie jest stanem akceptującym. Jeśli tak, to przechodzimy dalej - na wejściu znajduje się symbol $a \in \Sigma$, więc przechodzimy do stany śmietnikowego albo na wejści znajduje się symbol $i_{j - 1}$, więc przeprowadzamy dla niego analogiczne rozumowanie w odpowiednich stanach
+        \item Jeśli stos został opróżniony, nie odrzuciwszy wcześniej wejścia, to słowo jest akceptowane
+    \end{itemize}
+    \noindent oraz analogiczne dla gramatyki $G_B$.
+
+    \noindent \newline
+
+    \noindent Widzimy, że powyżej opisany automat jest zawsze determiniztyczny oraz zawsze odpowiada TAK lub NIE. Zatem zamieniając stany akceptujące z nieakceptującymi uzyskamy DPDA dla $L((G_A)^C)$ oraz $L((G_B)^C)$. Zatem mozemy wyznaczyć gramatyki bezkontekstowe $(G_A)^C$ oraz $(G_B)^C$.
+
+    \noindent \newline
+
+    \noindent Rozważmy zatem wcześniejszy problem. Mamy:
+    $$
+    L(G_A) \cap L(G_B)
+    \begin{cases}
+        \ne \varnothing & \text{PCP ma rozwiązanie} \\
+        = \varnothing & \text{PCP nie ma rozwiązania}
+    \end{cases}
+    $$
+    \noindent Możemy jednak zauważyć, że:
+    \begin{equation*}
+        \left
+        \lbrace
+        \begin{array}{l}
+            L(G_A) \cap L(G_B) = \varnothing \iff \overline{L(G_A)} \cup \overline{L(G_B)} = \Sigma^\ast \\
+            L(G_A) \cap L(G_B) \ne \varnothing \iff \overline{L(G_A)} \cup \overline{L(G_B)} \ne \Sigma^\ast
+        \end{array}
+        \right.
+    \end{equation*}
+    \noindent Gdzie $\overline{L(G)} = L(G^C)$.
+
+    \newpage
+
+    \noindent Stąd możemy stwierdzić, że pytanie, czy $\overline{L(G_A)} \cup \overline{L(G_B)} = \Sigma^\ast$ jest równoważne pytaniu, czy $PCP(A, B)$ ma rozwiązanie.
+
+    \noindent \newline
+
+    \noindent Możemy więc skonstruować gramatykę bezkontekstową $G : S \rightarrow S_A|S_B$ (gdzie $S_A$ i $S_B$ są symbolami startowymi gramatyk $G_A$ i $G_B$), dla której łatwo zauważyć, że:
+    $$L(G) = L(G_A) \cup L(G_B)$$
+    \noindent Stąd pytanie, czy $L(G) = \Sigma^\ast$ sprowadza się do pytania, czy $L(G_A) \cup L(G_B) = \Sigma^\ast$, a zatem jest ono nierozstrzygalne na podstawie nierozstrzygalności PCP. \qedsymbol
+
+\end{document}

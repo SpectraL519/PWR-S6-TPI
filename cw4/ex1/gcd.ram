@@ -1,0 +1,17 @@
+read 0      // read a (assume input cells are indexed from 0)
+store 1     // r1 := a
+read 1      // read b
+jpos x      // (loop-begin); jump -> calculate
+load 1      // return a (acc := a)
+halt
+store 2     // (calculate); r2 := b (init) / b := tmp
+load 1      // acc := a % b
+div 2
+mul 2
+sub 1
+mul =-1
+store 3     // tmp (r3) := acc
+load 2      // a := b
+store 1
+load 3      // acc := tmp
+jump 5      // jump -> loop-begin

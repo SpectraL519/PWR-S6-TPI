@@ -1,0 +1,23 @@
+read 0      // read n (assume input cells are indexed from 0)
+store 1     // r1 := n
+sub =1      // if (n >= 2)
+jpos 7      // jump -> check-prime
+load =0     // (ret-false); return false
+halt
+load =2     // (check-prime); i := 2
+store 2     // (loop-begin); r2 := i
+mul 2       // if (i * i <= n)
+sub =1
+sub 1
+jneg 15      // jump -> check-mod
+load =1     // return true
+halt
+load 1      // (check-mod); acc := n % i
+div 2
+mul 2
+sub 1
+mul =-1
+jzero 5     // jump -> ret-false
+load 2      // i++
+add =1
+jump 8      // jump -> loop-begin

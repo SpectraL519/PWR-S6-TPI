@@ -1,0 +1,15 @@
+load =1     // r1 := 1 (initial result)
+store 1
+read 0      // read n (assume input cells are indexed from 0)
+sub =1      // (loop-begin); if (n > 1)
+jpos x      // jump -> calculate
+load 1      // (end); return result (acc := result)
+halt
+add =1      // (calculate); r2 := n
+store 2
+load 1      // result *= n
+mul 2
+store 1
+load 2      // n--
+sub =1
+jump 4      // jump -> loop-beign

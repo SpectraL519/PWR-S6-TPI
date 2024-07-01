@@ -1,0 +1,13 @@
+load =0     // r1 := 0 (initial result)
+store 1
+read 0      // read n (assume input cells are indexed from 0)
+jpos 7      // (loop-begin); jump -> calculate
+load 1      // return result (acc := result)
+halt
+half        // (calculate); n := floor(n / 2)
+store 2     // r2 := n
+load 1      // result++
+add =1
+store 1
+load 2
+jump 4      // jump -> loop-begin

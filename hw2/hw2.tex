@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{titling}
+\usepackage[T1]{fontenc}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathabx}
+
+\pretitle{\begin{center}\Huge\bfseries}
+\posttitle{\par\end{center}\vskip 0.5em}
+\preauthor{\begin{center}\Large}
+\postauthor{\end{center}}
+\predate{\par\large\centering}
+\postdate{\par}
+
+\title{Teoretyczne Podstawy Informatyki \newline Zadanie Domowe}
+\author{Jakub Musiał 268442}
+\date{Maj 2024}
+
+\begin{document}
+
+\maketitle
+
+\hspace{1cm}
+
+\section*{Lista 7 - Zadanie 42}
+
+\subsection*{Opis zadania}
+    Pokazać, że najmniejszy zbiór funkcji zawierających $I_{n,k}$ oraz zamknięty na operację złożenia, minimum i rekursji prostej ($R_s$) jest równoważny modelowi funkcji rekurencyjnych ($R_\mu$).
+    \newline\newline
+    \noindent Definiujemy schemat rekursji prostej tworzącej funkcję $f:\mathbb{N}^{m + 1} \rightarrow \mathbb{N}$ za pomocą funkcji $g:\mathbb{N}^{m} \rightarrow \mathbb{N}$ i $h:\mathbb{N}^{m + 2} \rightarrow \mathbb{N}$ w następujący sposób:
+    $$
+    f(0, \overline{x}) = g(\overline{x}) \land f(n + 1, \overline{x}) = h(n, f(n, \overline{x}), \overline{x})
+    $$
+    \begin{center}
+        lub
+    \end{center}
+    $$
+    f(0) = c \land f(n + 1) = h(n f(n))
+    $$
+    \noindent Gdzie $\overline{x} = (x_1, ..., x_n) \in \mathbb{N}^n$.
+
+    \noindent \newline
+
+    \noindent Definiujemy klasę funkcji $\mu$-rekurencyjnych ($R_\mu$) jako najmniejszą w sensie zawierania klasę funkcji częściowych o dziedzinach zawartych w iloczynie kartezjańskim zbioru liczb naturalnych i wartościach naturalnych, zawierającą:
+    \begin{itemize}
+        \item Wszystkie funkcjie $I_{n,k}$
+        \item Funkcję charakterystyczną relacji mniejszości $\chi_< : \mathbb{N}^2 \rightarrow \{0, 1\}$
+        \item Dodawanie ($+ : \mathbb{N}^2 \rightarrow \mathbb{N}$) oraz mnożenie ($\times : \mathbb{N}^2 \rightarrow \mathbb{N}$)
+    \end{itemize}
+    oraz zamkniętą na operację złożenia i minimum.
+
+\newpage
+
+\subsection*{Rozwiązanie}
+    Z definicji $R_s$ oraz $R_\mu$ wiemy, że obie klasy zaweierają funkcje rzutowania ($I_{n,k}$) oraz są zamknięte na operację złożenia i minimum, zatem pomijając te elementy wspólne pokażemy, że $R_s \equiv R_\mu$.
+
+    \noindent \newline
+
+    \noindent Pokażmy, że $R_\mu \subseteq R_s$, budując funkcje $+$, $\times$ oraz $\chi_<$ za pomocą rekursji prostej:
+    \begin{itemize}
+        \item Dodawanie: $+(m, 0) = I_{1,1}(m) \land +(m, n + 1) = S(+(m, n))$
+        \item Mnożenie: $\times(m, 0) = 0 \land \times(m, n + 1) = +(\AddToHookNextWithArguments{hook}{code}(m, n), m)$
+        \item Relacja mniejszości: $\chi_<(m, n) = 1 \dotdiv (n \dotdiv m)$
+    \end{itemize}
+
+    \noindent Gdzie jako funkcje pomocnicze definiujemy:
+    \begin{itemize}
+        \item Odejmowanie: $\dotdiv(m, 0) = m \land \dotdiv(m, n + 1) = P(\dotdiv(m, n))$
+        \item Poprzednik: $P(0) = 0 \land P(n + 1) = I_{2,2}(P(n), n)$
+    \end{itemize}
+
+    \noindent \newline
+
+    \noindent Pokażmy, że $R_s \subseteq R_\mu$, budując schemat rekursji prostej za pomocą "narzędzi" dostępnych w modelu $R_\mu$:
+    $$
+    f(m, \overline{x}) = min_a(lh(a) = m + 1 \land (a)_0 = g(\overline{x}) \land (\forall i < m)((a)_{i + 1} = h(i, (a)_i, \overline{x})))
+    $$
+
+    \noindent \newline
+
+    \noindent Zatem skoro $R_\mu \subseteq R_s$ oraz $R_s \subseteq R_\mu$, to możemy stwierdzić, że $R_s \equiv R_\mu$. \qedsymbol
+
+
+\end{document}
